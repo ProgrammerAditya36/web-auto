@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import os
+import sys
 path = os.getcwd()
 while True:
-    project = int(input("Enter the type of project:\n1.Frontend\n2.Django\n3.Fullstack MERN\n4.End\n"))
-    if project == 1:
-        projectname = input("Enter the project name: ")
+    args = sys.argv[1:]
+    project = args[0]
+    if project == "1" or project == "fe":
+        projectname  = args[1] if len(args) > 1 else "mywebapp"
         os.system("mkdir " + projectname)
         os.chdir(projectname)
         os.system("touch index.html")
@@ -14,15 +16,15 @@ while True:
         os.system("touch script.js")
         os.system("code .")
         break
-    if project == 2:
-        projectname = input("Enter the project name: ")
-        appname = input("Enter the app name: ")
-        
+    if project == "2" or project == "django":
+        projectname = args[1] if len(args) > 1 else "mydjangoapp"
+        appname = args[2] if len(args) > 2 else None  
         ret = os.system("django-admin startproject " + projectname)
         if ret == 0:
             print("Project created successfully")
             os.chdir(projectname)
-            os.system("python manage.py startapp " + appname)
+            if(appname is not None):                
+                os.system("python manage.py startapp " + appname)
             os.system("python manage.py runserver")
             break
         else:
@@ -30,8 +32,8 @@ while True:
             c = int(input("Do you want to try again?\n1.Yes\n2.No\n"))
             if c == 2:
                 break
-    if project == 3:
-        projectname = input("Enter the project name: ")
+    if project == "3" or project == "react":
+        projectname = args[1] if len(args) > 1 else "my-react-app"
         os.system("create-vite "+projectname+" --template react-ts")
         os.chdir(projectname)
         os.system("npm install")
