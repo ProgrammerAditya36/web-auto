@@ -8,6 +8,8 @@ while True:
         os.system("mkdir " + projectname)
         os.chdir(projectname)
         os.system("touch index.html")
+        with open("index.html", "w") as f:
+            f.write("<!DOCTYPE html>\n<html>\n<head>\n<title></title>\n<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n<script src='script.js'></script>\n</body>\n</html>")
         os.system("touch style.css")
         os.system("touch script.js")
         os.system("code .")
