@@ -39,8 +39,19 @@ while True:
         os.system("npm install")
         os.system("npm run dev")
         break
+    if project == "4" or project == "node":
+        projectname = args[1] if len(args) > 1 else "my-node-app"
+        os.system("mkdir " + projectname)
+        os.chdir(projectname)
+        os.system("npm init -y")
+        os.system("npm install express")
+        os.system("touch index.js")
+        with open("index.js", "w") as f:
+            f.write("const express = require('express')\nconst app = express()\napp.get('/', (req, res) => {\nres.send('Hello World!')\n})\napp.listen(3000, () => {\nconsole.log('Server is running on http://localhost:3000')\n})")
+        os.system("npx nodemon index.js")
+        break
+    if project == 5:
+        break
     else:
         print("Invalid choice")
         continue
-    if project == 4:
-        break
