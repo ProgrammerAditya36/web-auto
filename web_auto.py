@@ -25,6 +25,7 @@ while True:
             os.chdir(projectname)
             if(appname is not None):                
                 os.system("python manage.py startapp " + appname)
+            os.system("code .")        
             os.system("python manage.py runserver")
             break
         else:
@@ -37,6 +38,7 @@ while True:
         os.system("create-vite "+projectname+" --template react-ts")
         os.chdir(projectname)
         os.system("npm install")
+        os.system("code .")
         os.system("npm run dev")
         break
     if project == "4" or project == "node":
@@ -48,6 +50,7 @@ while True:
         os.system("touch index.js")
         with open("index.js", "w") as f:
             f.write("const express = require('express')\nconst app = express()\napp.get('/', (req, res) => {\nres.send('Hello World!')\n})\napp.listen(3000, () => {\nconsole.log('Server is running on http://localhost:3000')\n})")
+        os.system("code .")        
         os.system("npx nodemon index.js")
         break
     if project == 5:
