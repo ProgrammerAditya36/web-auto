@@ -37,7 +37,7 @@ while True:
         projectname = args[1] if len(args) > 1 else "my-react-app"
         os.system("create-vite "+projectname+" --template react-ts")
         os.chdir(projectname)
-        os.system("npm install")
+        os.system("npm install -y")
         os.system("code .")
         os.system("npm run dev")
         break
