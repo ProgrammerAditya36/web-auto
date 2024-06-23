@@ -34,7 +34,7 @@ while True:
                 break
     if project == "3" or project == "react":
         projectname = args[1] if len(args) > 1 else "my-react-app"
-        os.system("npm create vite@latest "+projectname+" --template react")
+        os.system(f"npm create vite@latest {projectname} -- --template react")
         os.chdir(projectname)
         os.system("npm install -y")
         os.system("code .")
