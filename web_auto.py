@@ -26,7 +26,6 @@ while True:
             if(appname is not None):                
                 os.system("python manage.py startapp " + appname)
             os.system("code .")        
-            os.system("python manage.py runserver")
             break
         else:
             print("Error in creating project")
@@ -35,11 +34,10 @@ while True:
                 break
     if project == "3" or project == "react":
         projectname = args[1] if len(args) > 1 else "my-react-app"
-        os.system("create-vite "+projectname+" --template react-ts")
+        os.system("npm create vite@latest "+projectname+" --template react")
         os.chdir(projectname)
         os.system("npm install -y")
         os.system("code .")
-        os.system("npm run dev")
         break
     if project == "4" or project == "node":
         projectname = args[1] if len(args) > 1 else "my-node-app"
@@ -51,10 +49,9 @@ while True:
         with open("index.js", "w") as f:
             f.write("const express = require('express')\nconst app = express()\napp.get('/', (req, res) => {\nres.send('Hello World!')\n})\napp.listen(3000, () => {\nconsole.log('Server is running on http://localhost:3000')\n})")
         os.system("code .")        
-        os.system("npx nodemon index.js")
         break
     if project == 5:
         break
     else:
         print("Invalid choice")
-        continue
+        break
