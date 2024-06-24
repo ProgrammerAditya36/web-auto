@@ -30,6 +30,9 @@ def create_react_project(projectname, current_folder=False):
     if not current_folder:
         os.system(f"npm create vite@latest {projectname} -- --template react")
         os.chdir(projectname)
+        # Create or update vite.config.js to expose ports
+        with open("vite.config.js", "w") as f:
+            f.write("import { defineConfig } from 'vite';\n\nexport default defineConfig({\n  server: {\n    host: '0.0.0.0',\n  },\n});\n")
     os.system("npm install")
     os.system("code .")
 
@@ -52,7 +55,6 @@ def start_environment(project):
         os.system("python manage.py runserver")
     elif project in ["3", "react"]:
         print("Starting React development server with all ports exposed...")
-        os.environ["HOST"] = "0.0.0.0"
         os.system("npm run dev")
     elif project in ["4", "node"]:
         print("Starting Node.js server with nodemon...")
