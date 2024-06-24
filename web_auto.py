@@ -51,11 +51,12 @@ def start_environment(project):
         print("Starting Django development server...")
         os.system("python manage.py runserver")
     elif project in ["3", "react"]:
-        print("Starting React development server...")
+        print("Starting React development server with all ports exposed...")
+        os.environ["HOST"] = "0.0.0.0"
         os.system("npm run dev")
     elif project in ["4", "node"]:
-        print("Starting Node.js server...")
-        os.system("node index.js")
+        print("Starting Node.js server with nodemon...")
+        os.system("nodemon index.js")  # Use nodemon to run Node.js server
     else:
         print("Invalid project type for starting environment")
 
