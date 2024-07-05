@@ -88,7 +88,12 @@ if __name__ == "__main__":
             print("Error: -cc flag can only be used with react project")
             sys.exit(1)
         component_name = sys.argv[3] if len(sys.argv) > 3 else 'Component'
+        if(os.path.exists("src") == False):
+            print("Error: src folder not found")
+            sys.exit(1)
         os.chdir("src")
+        os.makedirs("components", exist_ok=True)
+        os.chdir("components")
         os.makedirs(component_name, exist_ok=True)
         os.chdir(component_name)
         with open(f"{component_name}.jsx", "w") as f:
