@@ -2,6 +2,8 @@
 import os
 import sys
 import json
+import requests
+from requests.auth import HTTPBasicAuth
 def create_fe_project(projectname, current_folder=False):
     if not current_folder:
         os.makedirs(projectname, exist_ok=True)
@@ -42,7 +44,23 @@ def create_node_project(projectname, current_folder=False):
     with open("index.js", "w") as f:
         f.write("const express = require('express')\nconst app = express()\napp.get('/', (req, res) => {\nres.send('Hello World!')\n})\napp.listen(3000, () => {\nconsole.log('Server is running on http://localhost:3000')\n})")
     os.system("code .")
+def check_repo_exists(username, repo_name, token):
+    url = f"https://api.github.com/repos/{username}/{repo_name}"
+    response = requests.get(url, auth=HTTPBasicAuth(username, token))
+    return response.status_code == 200
 
+def create_repo(username, repo_name, token):
+    url = "https://api.github.com/user/repos"
+    data = {
+        "name": repo_name,
+        "private": False,  # Make the repository public
+        "auto_init": True  # Initialize the repository with a README file
+    }
+    headers = {
+        "Accept": "application/vnd.github.v3+json"
+    }
+    response = requests.post(url, auth=HTTPBasicAuth(username, token), headers=headers, json=data)
+    return response.status_code == 201
 def start_environment(project):
     if project in ["1", "fe"]:
         print("Starting live server for Frontend project...")
@@ -106,7 +124,8 @@ if __name__ == "__main__":
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
-        # os.system("npm run build")
+        
+        os.system("npm run build")
         with open("vite.config.js", "r") as f:
             lines = f.readlines()
         insert_index = -1
@@ -130,7 +149,21 @@ if __name__ == "__main__":
         package_data["scripts"]["deploy"] = "gh-pages -d dist"
         with open("package.json","w") as f:
             json.dump(package_data,f,indent=2)
-        # os.system("npm run deploy")
+        username = "ProgrammerAditya36"
+        repo_name = page_name
+        token = "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"
+        if not check_repo_exists(username, repo_name, token):
+            print("Creating a new repository...")
+            if not create_repo(username, repo_name, token):
+                print("Error in creating repository")
+                sys.exit(1)
+            print("Repository created successfully")
+        else:
+            print("Repository already exists")
+        
+
+
+        os.system("npm run deploy")
         sys.exit()
 
     else:
