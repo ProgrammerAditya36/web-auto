@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
-
+import json
 def create_fe_project(projectname, current_folder=False):
     if not current_folder:
         os.makedirs(projectname, exist_ok=True)
@@ -100,6 +100,28 @@ if __name__ == "__main__":
             f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
         open(f"{component_name}.css", 'a').close()
         sys.exit()
+    elif "-mp" in sys.argv:
+        if "react" not in sys.argv:
+            print("Error: -mp flag can only be used with react project")
+            sys.exit(1)
+        page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
+        os.system("npm run build")
+        with open("vite.config,js", "r") as f:
+            lines = f.readlines()
+            with open("vite.config.js", "w") as f:
+                for line in lines:
+                    if "plugins" in line:
+                        f.write("  base: './',\n")
+        with open("package.json","r") as f:
+            package_data = json.load(f)
+        homepage = f"www.ProgrammerAditya36.github.io/{projectname}"
+        package_data["homepage"] = homepage
+        package_data["scripts"]["predeploy"] = "npm run build"
+        package_data["scripts"]["deploy"] = "gh-pages -d dist"
+        with open("package.json","w") as f:
+            json.dump(package_data,f,indent=2)
+        os.system("npm run deploy")
+
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
