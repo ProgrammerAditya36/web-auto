@@ -106,7 +106,7 @@ if __name__ == "__main__":
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
-        os.system("npm run build")
+        # os.system("npm run build")
         with open("vite.config.js", "r") as f:
             lines = f.readlines()
         insert_index = -1
@@ -122,13 +122,15 @@ if __name__ == "__main__":
             f.writelines(lines)
         with open("package.json","r") as f:
             package_data = json.load(f)
-        homepage = f"www.ProgrammerAditya36.github.io/{projectname}"
+        
+        homepage = f"www.ProgrammerAditya36.github.io/{page_name}"
+        print(homepage)
         package_data["homepage"] = homepage
         package_data["scripts"]["predeploy"] = "npm run build"
         package_data["scripts"]["deploy"] = "gh-pages -d dist"
         with open("package.json","w") as f:
             json.dump(package_data,f,indent=2)
-        os.system("npm run deploy")
+        # os.system("npm run deploy")
         sys.exit()
 
     else:
