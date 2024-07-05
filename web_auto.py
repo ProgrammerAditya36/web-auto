@@ -30,10 +30,7 @@ def create_react_project(projectname, current_folder=False):
     if not current_folder:
         os.system(f"npm create vite@latest {projectname} -- --template react")
         os.chdir(projectname)
-        # Create or update vite.config.js to expose ports
-        with open("vite.config.js", "w") as f:
-            f.write("import { defineConfig } from 'vite';\n\nexport default defineConfig({\n  server: {\n    host: '0.0.0.0',\n  },\n});\n")
-    os.system("npm install")
+    
     os.system("code .")
 
 def create_node_project(projectname, current_folder=False):
@@ -55,9 +52,10 @@ def start_environment(project):
         os.system("python manage.py runserver")
     elif project in ["3", "react"]:
         print("Starting React development server with all ports exposed...")
-        os.system("npm run dev")
+        os.system("vite --host 0.0.0.0")
     elif project in ["4", "node"]:
-        print("Starting Node.js server with nodemon...")
+        print("Starting Node.js server with nodemon...")        
+        os.system("npm install -g nodemon")
         os.system("nodemon index.js")  # Use nodemon to run Node.js server
     else:
         print("Invalid project type for starting environment")
@@ -85,6 +83,18 @@ if __name__ == "__main__":
         start_flag = True
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         sys.argv.remove("-start")
+    elif "-cc" in sys.argv:
+        if "react" not in sys.argv:
+            print("Error: -cc flag can only be used with react project")
+            sys.exit(1)
+        component_name = sys.argv[3] if len(sys.argv) > 3 else 'Component'
+        os.chdir("src")
+        os.makedirs(component_name, exist_ok=True)
+        os.chdir(component_name)
+        with open(f"{component_name}.jsx", "w") as f:
+            f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
+        open(f"{component_name}.css", 'a').close()
+        sys.exit()
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
