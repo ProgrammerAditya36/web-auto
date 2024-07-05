@@ -101,17 +101,25 @@ if __name__ == "__main__":
         open(f"{component_name}.css", 'a').close()
         sys.exit()
     elif "-mp" in sys.argv:
+        print(sys.argv)
         if "react" not in sys.argv:
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
         os.system("npm run build")
-        with open("vite.config,js", "r") as f:
+        with open("vite.config.js", "r") as f:
             lines = f.readlines()
-            with open("vite.config.js", "w") as f:
-                for line in lines:
-                    if "plugins" in line:
-                        f.write("  base: './',\n")
+        insert_index = -1
+        for i,line in enumerate(lines):
+            if 'export default' in line:
+                insert_index = i+1
+                break
+        base_config = " base:'./',\n"
+        if insert_index != -1 and base_config not in lines:
+            lines.insert(insert_index, base_config)
+        print(lines)
+        with open("vite.config.js", "w") as f:
+            f.writelines(lines)
         with open("package.json","r") as f:
             package_data = json.load(f)
         homepage = f"www.ProgrammerAditya36.github.io/{projectname}"
@@ -121,41 +129,42 @@ if __name__ == "__main__":
         with open("package.json","w") as f:
             json.dump(package_data,f,indent=2)
         os.system("npm run deploy")
+        sys.exit()
 
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
 
-    if project in ["1", "fe"]:
-        if not projectname:
-            projectname = "mywebapp"
-        if start_flag:
-            start_environment(project)
+        if project in ["1", "fe"]:
+            if not projectname:
+                projectname = "mywebapp"
+            if start_flag:
+                start_environment(project)
+            else:
+                create_fe_project(projectname, current_folder)
+        elif project in ["2", "django"]:
+            if not projectname:
+                projectname = "mydjangoapp"
+            if start_flag:
+                start_environment(project)
+            else:
+                create_django_project(projectname, appname, current_folder)
+        elif project in ["3", "react"]:
+            if not projectname:
+                projectname = "my-react-app"
+            if start_flag:
+                start_environment(project)
+            else:
+                create_react_project(projectname, current_folder)
+        elif project in ["4", "node"]:
+            if not projectname:
+                projectname = "my-node-app"
+            if start_flag:
+                start_environment(project)
+            else:
+                create_node_project(projectname, current_folder)
+        elif project == "5":
+            sys.exit()
         else:
-            create_fe_project(projectname, current_folder)
-    elif project in ["2", "django"]:
-        if not projectname:
-            projectname = "mydjangoapp"
-        if start_flag:
-            start_environment(project)
-        else:
-            create_django_project(projectname, appname, current_folder)
-    elif project in ["3", "react"]:
-        if not projectname:
-            projectname = "my-react-app"
-        if start_flag:
-            start_environment(project)
-        else:
-            create_react_project(projectname, current_folder)
-    elif project in ["4", "node"]:
-        if not projectname:
-            projectname = "my-node-app"
-        if start_flag:
-            start_environment(project)
-        else:
-            create_node_project(projectname, current_folder)
-    elif project == "5":
-        sys.exit()
-    else:
-        print("Invalid choice")
-        sys.exit(1)
+            print("Invalid choice")
+            sys.exit(1)
