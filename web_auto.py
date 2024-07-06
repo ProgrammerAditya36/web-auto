@@ -176,7 +176,37 @@ if __name__ == "__main__":
         os.system("npm run deploy")
         print(f"Deployment successful the page is live at {homepage}")
         sys.exit()
-
+    elif "-tailwind" in sys.argv:
+        if "react" in sys.argv:
+            os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
+            os.system("npx tailwindcss init -p")
+            with open("tailwind.config.js", "r") as f:
+                lines = f.readlines()
+            insert_index = -1
+            for i,line in enumerate(lines):
+                if 'module.exports' in line:
+                    insert_index = i+1
+                    break
+            purge_config = "purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
+            if insert_index != -1 and purge_config not in lines:
+                lines.insert(insert_index, purge_config)
+            with open("tailwind.config.js", "w") as f:
+                f.writelines(lines)
+            with open("postcss.config.js", "r") as f:
+                lines = f.readlines()
+            insert_index = -1
+            for i,line in enumerate(lines):
+                if 'module.exports' in line:
+                    insert_index = i+1
+                    break
+            tailwind_config = "require('tailwindcss'),\nrequire('autoprefixer'),\n"
+            if insert_index != -1 and tailwind_config not in lines:
+                lines.insert(insert_index, tailwind_config)
+            with open("postcss.config.js", "w") as f:
+                f.writelines(lines)
+            with open("src/index.css", "w") as f:
+                f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
+            sys.exit()
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
