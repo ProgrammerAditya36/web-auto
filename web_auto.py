@@ -196,8 +196,10 @@ if __name__ == "__main__":
 
             with open("src/index.css", "w") as f:
                 f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
-            with open("src/App.jsx", "w") as f:
+            with open("src/App.css", "w") as f:
                 f.write("")
+            with open("src/App.jsx", "w") as f:
+                f.write("import './App.css';\nimport './index.css'\nimport React from 'react'\nfunction App() {\n  return (\n    <div className='App'>\n      <h1 className='text-2xl font-bold text-center mt-4'>Hello, Tailwind CSS!</h1>\n    </div>\n  );\n}\n\nexport default App;")
             sys.exit()
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
