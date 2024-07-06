@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 import os
 import sys
 import json
 import requests
 from requests.auth import HTTPBasicAuth
+
 def create_fe_project(projectname, current_folder=False):
     if not current_folder:
         os.makedirs(projectname, exist_ok=True)
@@ -44,6 +44,7 @@ def create_node_project(projectname, current_folder=False):
     with open("index.js", "w") as f:
         f.write("const express = require('express')\nconst app = express()\napp.get('/', (req, res) => {\nres.send('Hello World!')\n})\napp.listen(3000, () => {\nconsole.log('Server is running on http://localhost:3000')\n})")
     os.system("code .")
+
 def check_repo_exists(username, repo_name, token):
     url = f"https://api.github.com/repos/{username}/{repo_name}"
     response = requests.get(url, auth=HTTPBasicAuth(username, token))
@@ -61,6 +62,7 @@ def create_repo(username, repo_name, token):
     }
     response = requests.post(url, auth=HTTPBasicAuth(username, token), headers=headers, json=data)
     return response.status_code == 201
+
 def start_environment(project):
     if project in ["1", "fe"]:
         print("Starting live server for Frontend project...")
@@ -119,16 +121,17 @@ if __name__ == "__main__":
         open(f"{component_name}.css", 'a').close()
         sys.exit()
     elif "-mp" in sys.argv:
-        print(sys.argv)
         if "react" not in sys.argv:
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
         homepage = f"https://ProgrammerAditya36.github.io/{page_name}"
-        print(homepage)
         username = "ProgrammerAditya36"
         repo_name = page_name
-        token = "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"
+        token = os.getenv("GITHUB_TOKEN")
+        if not token:
+            print("Error: GitHub token not found. Set the GITHUB_TOKEN environment variable.")
+            sys.exit(1)
         if not check_repo_exists(username, repo_name, token):
             print("Creating a new repository...")
             if not create_repo(username, repo_name, token):
@@ -154,12 +157,10 @@ if __name__ == "__main__":
         base_config = " base:'./',\n"
         if insert_index != -1 and base_config not in lines:
             lines.insert(insert_index, base_config)
-        print(lines)
         with open("vite.config.js", "w") as f:
             f.writelines(lines)
         with open("package.json","r") as f:
             package_data = json.load(f)
-        
         
         package_data["homepage"] = homepage
         package_data["scripts"]["predeploy"] = "npm run build"
@@ -167,9 +168,6 @@ if __name__ == "__main__":
         with open("package.json","w") as f:
             json.dump(package_data,f,indent=2)
         
-        
-
-
         os.system("npm run deploy")
         print(f"Deployment successful the page is live at {homepage}")
         sys.exit()
