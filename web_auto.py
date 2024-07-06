@@ -176,32 +176,53 @@ if __name__ == "__main__":
         os.system("npm run deploy")
         print(f"Deployment successful the page is live at {homepage}")
         sys.exit()
+
+
     elif "-tailwind" in sys.argv:
         if "react" in sys.argv:
             os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
             os.system("npx tailwindcss init -p")
+
             # Update tailwind.config.js
             with open("tailwind.config.js", "r") as f:
                 lines = f.readlines()
 
-            purge_config = "  purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
+            content_config = "  content: ['./public/index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
             insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
 
-            if insert_index != -1 and purge_config not in lines:
-                lines.insert(insert_index, purge_config)
+            if insert_index != -1 and content_config not in lines:
+                lines.insert(insert_index, content_config)
+
             with open("tailwind.config.js", "w") as f:
                 f.writelines(lines)
-            
 
-            
-
+            # Update src/index.css
             with open("src/index.css", "w") as f:
                 f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
+
+            # Create src/App.css
             with open("src/App.css", "w") as f:
                 f.write("")
+
+            # Update src/App.jsx
             with open("src/App.jsx", "w") as f:
-                f.write("import './App.css';\nimport './index.css'\nimport React from 'react'\nfunction App() {\n  return (\n    <div className='App'>\n      <h1 className='text-2xl font-bold text-center mt-4'>Hello, Tailwind CSS!</h1>\n    </div>\n  );\n}\n\nexport default App;")
+                f.write("""
+    import './App.css';
+    import './index.css';
+    import React from 'react';
+
+    function App() {
+    return (
+        <div className='App'>
+        <h1 className='text-2xl font-bold text-center mt-4'>Hello, Tailwind CSS!</h1>
+        </div>
+    );
+    }
+
+    export default App;
+    """)
             sys.exit()
+
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
