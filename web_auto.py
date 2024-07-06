@@ -191,11 +191,12 @@ if __name__ == "__main__":
 
                 if insert_index != -1 and purge_config not in lines:
                     lines.insert(insert_index, purge_config)
+                with open("tailwind.config.js", "w") as f:
+                    f.writelines(lines)
             except FileNotFoundError:
                 pass
 
-            with open("tailwind.config.js", "w") as f:
-                f.writelines(lines)
+            
 
             with open("src/index.css", "w") as f:
                 f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
