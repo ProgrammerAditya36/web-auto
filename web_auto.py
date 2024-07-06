@@ -196,7 +196,8 @@ if __name__ == "__main__":
 
             with open("src/index.css", "w") as f:
                 f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
-
+            with open("src/App.jsx", "w") as f:
+                f.write("")
             sys.exit()
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
