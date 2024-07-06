@@ -34,6 +34,7 @@ def create_react_project(projectname, current_folder=False):
     if not current_folder:
         os.system(f"npm create vite@latest {projectname} -- --template react")
         os.chdir(projectname)
+        os.system("npm install")
     
     os.system("code .")
 
