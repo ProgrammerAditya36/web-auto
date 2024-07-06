@@ -58,7 +58,7 @@ def create_repo(username, repo_name, token):
     data = {
         "name": repo_name,
         "private": False,  # Make the repository public
-        "auto_init": True  # Initialize the repository with a README file
+        "auto_init": False  # Initialize the repository with a README file
     }
     headers = {
         "Accept": "application/vnd.github.v3+json"
@@ -141,10 +141,10 @@ if __name__ == "__main__":
                 print("Error in creating repository")
                 sys.exit(1)
             print("Repository created successfully")
+            os.system("git init")
         else:
             print("Repository already exists")
-        os.system("git init")
-        os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")
+        os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")        
         os.system("git add .")
         os.system("git commit -m 'Deploying to GitHub Pages'")
         os.system("git push -u origin main")
