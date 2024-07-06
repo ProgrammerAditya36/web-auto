@@ -109,7 +109,7 @@ if __name__ == "__main__":
             sys.exit(1)
         component_name = sys.argv[3] if len(sys.argv) > 3 else 'Component'
         if(os.path.exists("src") == False):
-            print("Error: src folder not found")
+            print("Error: src folder not found ")
             sys.exit(1)
         os.chdir("src")
         os.makedirs("components", exist_ok=True)
