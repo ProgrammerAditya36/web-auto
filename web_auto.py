@@ -124,6 +124,21 @@ if __name__ == "__main__":
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
+        homepage = f"www.ProgrammerAditya36.github.io/{page_name}"
+        print(homepage)
+        username = "ProgrammerAditya36"
+        repo_name = page_name
+        token = "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"
+        if not check_repo_exists(username, repo_name, token):
+            print("Creating a new repository...")
+            if not create_repo(username, repo_name, token):
+                print("Error in creating repository")
+                sys.exit(1)
+            print("Repository created successfully")
+        else:
+            print("Repository already exists")
+        os.system("git init")
+        os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")
         
         os.system("npm run build")
         with open("vite.config.js", "r") as f:
@@ -142,24 +157,13 @@ if __name__ == "__main__":
         with open("package.json","r") as f:
             package_data = json.load(f)
         
-        homepage = f"www.ProgrammerAditya36.github.io/{page_name}"
-        print(homepage)
+        
         package_data["homepage"] = homepage
         package_data["scripts"]["predeploy"] = "npm run build"
         package_data["scripts"]["deploy"] = "gh-pages -d dist"
         with open("package.json","w") as f:
             json.dump(package_data,f,indent=2)
-        username = "ProgrammerAditya36"
-        repo_name = page_name
-        token = "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"
-        if not check_repo_exists(username, repo_name, token):
-            print("Creating a new repository...")
-            if not create_repo(username, repo_name, token):
-                print("Error in creating repository")
-                sys.exit(1)
-            print("Repository created successfully")
-        else:
-            print("Repository already exists")
+        
         
 
 
