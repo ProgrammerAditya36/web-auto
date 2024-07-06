@@ -178,7 +178,7 @@ if __name__ == "__main__":
         sys.exit()
 
 
-    elif "-tailwind" in sys.argv:
+    if "-tailwind" in sys.argv:
         if "react" in sys.argv:
             os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
             os.system("npx tailwindcss init -p")
@@ -187,11 +187,21 @@ if __name__ == "__main__":
             with open("tailwind.config.js", "r") as f:
                 lines = f.readlines()
 
-            content_config = "  content: ['./public/index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
-            insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
+            content_lines = [
+                "  './public/index.html',",
+                "  './src/**/*.{js,jsx,ts,tsx}',"
+            ]
 
-            if insert_index != -1 and content_config not in lines:
-                lines.insert(insert_index, content_config)
+            # Find the content property
+            content_index = next((i for i, line in enumerate(lines) if 'content:' in line), -1)
+            if content_index != -1:
+                # Find the closing bracket of the content array
+                closing_bracket_index = next((i for i, line in enumerate(lines[content_index:]) if ']' in line), -1) + content_index
+
+                # Insert content paths if they are not already present
+                for content_line in content_lines:
+                    if content_line not in lines[content_index:closing_bracket_index]:
+                        lines.insert(closing_bracket_index, f"    {content_line}\n")
 
             with open("tailwind.config.js", "w") as f:
                 f.writelines(lines)
