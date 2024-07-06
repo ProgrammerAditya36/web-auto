@@ -183,28 +183,21 @@ if __name__ == "__main__":
             os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
             os.system("npx tailwindcss init -p")
 
-            # Update tailwind.config.js
-            with open("tailwind.config.js", "r") as f:
-                lines = f.readlines()
-
-            content_lines = [
-                "  './public/index.html',",
-                "  './src/**/*.{js,jsx,ts,tsx}',"
-            ]
-
-            # Find the content property
-            content_index = next((i for i, line in enumerate(lines) if 'content:' in line), -1)
-            if content_index != -1:
-                # Find the closing bracket of the content array
-                closing_bracket_index = next((i for i, line in enumerate(lines[content_index:]) if ']' in line), -1) + content_index
-
-                # Insert content paths if they are not already present
-                for content_line in content_lines:
-                    if content_line not in lines[content_index:closing_bracket_index]:
-                        lines.insert(closing_bracket_index, f"    {content_line}\n")
-
+            # Write the complete tailwind.config.js file
+            tailwind_config = """
+    module.exports = {
+    content: [
+        './public/index.html',
+        './src/**/*.{js,jsx,ts,tsx}',
+    ],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+    }
+    """
             with open("tailwind.config.js", "w") as f:
-                f.writelines(lines)
+                f.write(tailwind_config)
 
             # Update src/index.css
             with open("src/index.css", "w") as f:
@@ -232,7 +225,6 @@ if __name__ == "__main__":
     export default App;
     """)
             sys.exit()
-
     else:
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
