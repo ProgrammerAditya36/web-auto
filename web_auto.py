@@ -180,21 +180,18 @@ if __name__ == "__main__":
         if "react" in sys.argv:
             os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
             os.system("npx tailwindcss init -p")
-
             # Update tailwind.config.js
-            try:
-                with open("tailwind.config.js", "r") as f:
-                    lines = f.readlines()
+            with open("tailwind.config.js", "r") as f:
+                lines = f.readlines()
 
-                purge_config = "  purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
-                insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
+            purge_config = "  purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
+            insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
 
-                if insert_index != -1 and purge_config not in lines:
-                    lines.insert(insert_index, purge_config)
-                with open("tailwind.config.js", "w") as f:
-                    f.writelines(lines)
-            except FileNotFoundError:
-                pass
+            if insert_index != -1 and purge_config not in lines:
+                lines.insert(insert_index, purge_config)
+            with open("tailwind.config.js", "w") as f:
+                f.writelines(lines)
+            
 
             
 
