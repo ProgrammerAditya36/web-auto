@@ -127,7 +127,7 @@ if __name__ == "__main__":
         if "react" not in sys.argv:
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
-        page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
+        page_name = sys.argv[4] if len(sys.argv) > 4 else 'Page'
         homepage = f"https://ProgrammerAditya36.github.io/{page_name}"
         username = "ProgrammerAditya36"
         repo_name = page_name
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             print("Repository already exists")
         os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")
         os.system("npm install gh-pages --save-dev")
-        if "-mpp" in sys.argv:        
+        if "-pc" in sys.argv:        
             os.system("git add .")
             os.system("git commit -m 'Deploying to GitHub Pages'")
             os.system("git push -u origin main")
