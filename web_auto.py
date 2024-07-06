@@ -144,10 +144,12 @@ if __name__ == "__main__":
             os.system("git init")
         else:
             print("Repository already exists")
-        os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")        
-        os.system("git add .")
-        os.system("git commit -m 'Deploying to GitHub Pages'")
-        os.system("git push -u origin main")
+        os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")
+        os.system("npm install gh-pages --save-dev")
+        if "-mpp" in sys.argv:        
+            os.system("git add .")
+            os.system("git commit -m 'Deploying to GitHub Pages'")
+            os.system("git push -u origin main")
 
         os.system("npm run build")
         with open("vite.config.js", "r") as f:
