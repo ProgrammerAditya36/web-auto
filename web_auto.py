@@ -57,7 +57,7 @@ def create_repo(username, repo_name, token):
     url = "https://api.github.com/user/repos"
     data = {
         "name": repo_name,
-        "private": False,  # Make the repository public
+        "private": True,  # Make the repository public
         "auto_init": False  # Initialize the repository with a README file
     }
     headers = {
