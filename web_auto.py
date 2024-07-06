@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python33
 
 import os
 import sys
@@ -27,7 +27,7 @@ def create_django_project(projectname, appname=None, current_folder=False):
             return
         os.chdir(projectname)
     if appname:
-        os.system(f"python manage.py startapp {appname}")
+        os.system(f"python3 manage.py startapp {appname}")
     os.system("code .")
 
 def create_react_project(projectname, current_folder=False):
@@ -71,7 +71,7 @@ def start_environment(project):
         os.system("live-server")
     elif project in ["2", "django"]:
         print("Starting Django development server...")
-        os.system("python manage.py runserver")
+        os.system("python3 manage.py runserver")
     elif project in ["3", "react"]:
         print("Starting React development server with all ports exposed...")
         os.system("vite --host 0.0.0.0")
