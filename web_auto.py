@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import json
@@ -176,36 +178,36 @@ if __name__ == "__main__":
         projectname = sys.argv[2] if len(sys.argv) > 2 else None
         appname = sys.argv[3] if len(sys.argv) > 3 else None
 
-        if project in ["1", "fe"]:
-            if not projectname:
-                projectname = "mywebapp"
-            if start_flag:
-                start_environment(project)
-            else:
-                create_fe_project(projectname, current_folder)
-        elif project in ["2", "django"]:
-            if not projectname:
-                projectname = "mydjangoapp"
-            if start_flag:
-                start_environment(project)
-            else:
-                create_django_project(projectname, appname, current_folder)
-        elif project in ["3", "react"]:
-            if not projectname:
-                projectname = "my-react-app"
-            if start_flag:
-                start_environment(project)
-            else:
-                create_react_project(projectname, current_folder)
-        elif project in ["4", "node"]:
-            if not projectname:
-                projectname = "my-node-app"
-            if start_flag:
-                start_environment(project)
-            else:
-                create_node_project(projectname, current_folder)
-        elif project == "5":
-            sys.exit()
+    if project in ["1", "fe"]:
+        if not projectname:
+            projectname = "mywebapp"
+        if start_flag:
+            start_environment(project)
         else:
-            print("Invalid choice")
-            sys.exit(1)
+            create_fe_project(projectname, current_folder)
+    elif project in ["2", "django"]:
+        if not projectname:
+            projectname = "mydjangoapp"
+        if start_flag:
+            start_environment(project)
+        else:
+            create_django_project(projectname, appname, current_folder)
+    elif project in ["3", "react"]:
+        if not projectname:
+            projectname = "my-react-app"
+        if start_flag:
+            start_environment(project)
+        else:
+            create_react_project(projectname, current_folder)
+    elif project in ["4", "node"]:
+        if not projectname:
+            projectname = "my-node-app"
+        if start_flag:
+            start_environment(project)
+        else:
+            create_node_project(projectname, current_folder)
+    elif project == "5":
+        sys.exit()
+    else:
+        print("Invalid choice")
+        sys.exit(1)
