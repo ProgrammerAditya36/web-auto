@@ -124,7 +124,7 @@ if __name__ == "__main__":
             print("Error: -mp flag can only be used with react project")
             sys.exit(1)
         page_name = sys.argv[3] if len(sys.argv) > 3 else 'Page'
-        homepage = f"www.ProgrammerAditya36.github.io/{page_name}"
+        homepage = f"https://ProgrammerAditya36.github.io/{page_name}"
         print(homepage)
         username = "ProgrammerAditya36"
         repo_name = page_name
@@ -139,7 +139,10 @@ if __name__ == "__main__":
             print("Repository already exists")
         os.system("git init")
         os.system(f"git remote add origin https://github.com/{username}/{repo_name}.git")
-        
+        os.system("git add .")
+        os.system("git commit -m 'Deploying to GitHub Pages'")
+        os.system("git push -u origin main")
+
         os.system("npm run build")
         with open("vite.config.js", "r") as f:
             lines = f.readlines()
@@ -168,6 +171,7 @@ if __name__ == "__main__":
 
 
         os.system("npm run deploy")
+        print(f"Deployment successful the page is live at {homepage}")
         sys.exit()
 
     else:
