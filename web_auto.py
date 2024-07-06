@@ -182,14 +182,17 @@ if __name__ == "__main__":
             os.system("npx tailwindcss init -p")
 
             # Update tailwind.config.js
-            with open("tailwind.config.js", "r") as f:
-                lines = f.readlines()
+            try:
+                with open("tailwind.config.js", "r") as f:
+                    lines = f.readlines()
 
-            purge_config = "  purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
-            insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
+                purge_config = "  purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],\n"
+                insert_index = next((i + 1 for i, line in enumerate(lines) if 'module.exports' in line), -1)
 
-            if insert_index != -1 and purge_config not in lines:
-                lines.insert(insert_index, purge_config)
+                if insert_index != -1 and purge_config not in lines:
+                    lines.insert(insert_index, purge_config)
+            except FileNotFoundError:
+                pass
 
             with open("tailwind.config.js", "w") as f:
                 f.writelines(lines)
