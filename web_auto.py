@@ -39,7 +39,8 @@ def create_react_project(projectname, current_folder=False):
     
     os.system("code .")
 def copy_hooks():
-    hooks_src_dir = "../hooks"  # Update this path to your custom hooks directory
+    print(os.getcwd());
+    hooks_src_dir = "/usr/local/bin/hooks"  # Update this path to your custom hooks directory
 
     # Create hooks directory
     os.makedirs("src/hooks", exist_ok=True)
