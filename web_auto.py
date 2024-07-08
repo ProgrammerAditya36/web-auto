@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import sys
 import json
 import requests
@@ -37,7 +38,17 @@ def create_react_project(projectname, current_folder=False):
         os.system("npm install")
     
     os.system("code .")
+def copy_hooks():
+    hooks_src_dir = "./hooks"  # Update this path to your custom hooks directory
 
+    # Create hooks directory
+    os.makedirs("src/hooks", exist_ok=True)
+
+    # Copy custom hooks
+    for hook_file in os.listdir(hooks_src_dir):
+        full_file_name = os.path.join(hooks_src_dir, hook_file)
+        if os.path.isfile(full_file_name):
+            shutil.copy(full_file_name, "src/hooks")
 def create_node_project(projectname, current_folder=False):
     if not current_folder:
         os.makedirs(projectname, exist_ok=True)
@@ -184,8 +195,10 @@ if __name__ == "__main__":
         print(f"Deployment successful the page is live at {homepage}")
         sys.exit()
 
-
-    if "-tailwind" in sys.argv:
+    elif '-gethooks'in sys.argv:
+        copy_hooks()
+        sys.exit()
+    elif "-tailwind" in sys.argv:
         if "react" in sys.argv:
             os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
             os.system("npx tailwindcss init -p")
