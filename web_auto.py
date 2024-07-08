@@ -112,6 +112,7 @@ if __name__ == "__main__":
             sys.exit(1)
         component_dir = sys.argv[3] if len(sys.argv) > 3 else 'components'
         component_name = sys.argv[4] if len(sys.argv) > 4 else 'Component'
+        create_css = "-css" in sys.argv
         if(os.path.exists("src") == False):
             print("Error: src folder not found ")
             sys.exit(1)
@@ -119,11 +120,15 @@ if __name__ == "__main__":
         if(component_dir != '.'):
             os.makedirs(component_dir, exist_ok=True)
             os.chdir(component_dir)
-        os.makedirs(component_name, exist_ok=True)
-        os.chdir(component_name)
-        with open(f"{component_name}.jsx", "w") as f:
-            f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-        open(f"{component_name}.css", 'a').close()
+        if create_css:
+            os.makedirs(component_name, exist_ok=True)
+            os.chdir(component_name)
+            with open(f"{component_name}.jsx", "w") as f:
+                f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
+            open(f"{component_name}.css", 'a').close()
+        else:
+            with open(f"{component_name}.jsx", "w") as f:
+                f.write(f"import React from 'react';\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
         sys.exit()
     elif "-mp" in sys.argv:
         if "react" not in sys.argv:
