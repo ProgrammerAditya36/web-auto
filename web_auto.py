@@ -271,7 +271,7 @@ def set_tailwind(material_tailwind=False):
         f.write(tailwind_config)
     with open("src/index.css", "w") as f:
         f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
-    os.mkdir(".vscode")
+    os.makedirs(".vscode", exist_ok=True)
     with open(".vscode/settings.json", "w") as f:
         f.write("""{"editor.formatOnSave": true,
                 "files.associations": {"*.css": "tailwindcss"},
