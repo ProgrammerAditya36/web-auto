@@ -13,7 +13,7 @@ def create_react_project(projectname, ts=False):
     os.system("npm install")
     os.system("code .")
 
-def create_react_component(component_dir=True, component_name='Component', create_css=False, ts=False):
+def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False):
     extension = "tsx" if ts else "jsx"
     if not os.path.exists("src"):
         print("Error: src folder not found")
@@ -22,14 +22,18 @@ def create_react_component(component_dir=True, component_name='Component', creat
     os.chdir("src")
     os.makedirs("components", exist_ok=True)
     os.chdir("components")
-
-    if component_dir or create_css:
+    print(nodir)
+    if( not nodir):
         os.makedirs(component_name, exist_ok=True)
         os.chdir(component_name)
         with open(f"{component_name}.{extension}", "w") as f:
             f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-        if create_css:
-            open(f"{component_name}.css", 'a').close()
+    if (create_css):
+        os.makedirs(component_name, exist_ok=True)
+        os.chdir(component_name)
+        with open(f"{component_name}.{extension}", "w") as f:
+            f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
+        open(f"{component_name}.css", 'a').close()
     else:
         with open(f"{component_name}.{extension}", "w") as f:
             f.write(f"import React from 'react';\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
@@ -351,7 +355,7 @@ Additional Options:
         start_project(project)
         sys.exit()
     elif flag == "-cc":
-        create_react_component(component_dir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args)
+        create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args)
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
