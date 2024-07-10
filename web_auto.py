@@ -243,17 +243,16 @@ def copy_hooks():
 def set_tailwind():
     os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
     os.system("npx tailwindcss init -p")
+    os.system("npm i @material-tailwind/react")
     tailwind_config = """
-    module.exports = {
-    content: [
-        './public/index.html',
-        './src/**/*.{js,jsx,ts,tsx}',
-    ],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-    }
+    import withMT from '@material-tailwind/react/utils/withMT';
+    export default withMT({
+        content : ["*./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+        theme:{
+            extend:{},
+        },
+        plugins:[],
+    });
     """
     with open("tailwind.config.js", "w") as f:
         f.write(tailwind_config)
@@ -373,14 +372,24 @@ Additional Options:
         sys.exit(1)
 
     project = sys.argv[1]
+    flag = sys.argv[2] if len(sys.argv) > 2 else None
     print(project)
     args = sys.argv
     print(args)
     if "-start" in args:
         start_project(project)
         sys.exit()
-
-    if project in ["1", "fe"]:
+    elif flag == "-cc":
+        create_react_component(component_dir= args[3] if len(args) > 3 and '-'not in args[3] else 'components',component_name= args[2] if len(args)> 2   else 'Component',create_css= "-css" in args, ts="-ts" in args)
+    elif flag == "-mp":
+        deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
+    elif flag == "-tw":
+        set_tailwind()
+    elif project == "deploy":
+        deploy(type=args[2], projectname=args[3] if len(args) > 3 else "project")
+    elif flag == "-gethooks":
+        copy_hooks()
+    elif project in ["1", "fe"]:
         create_fe_project(args[2] if len(args) > 2 else "mywebapp")
     elif project in ["2", "django"]:
         create_django_project(args[2] if len(args) > 2 else "mydjangoproject", args[2] if len(args) > 2 else "mydjangoapp")
@@ -392,16 +401,7 @@ Additional Options:
         create_node_project(args[2] if len(args) > 2 else "my-node-app")
     elif project in ["6", "mern"]:
         create_mern(project_name=args[2] if len(args)>2 else "my-mern_project",github_repo=args[2] if len(args)>2 else None)
-    elif project == "-cc":
-        create_react_component(component_dir= args[3] if len(args) > 3 and '-'not in args[3] else 'components',component_name= args[2] if len(args)> 2   else 'Component',create_css= "-css" in args, ts="-ts" in args)
-    elif project == "-mp":
-        deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
-    elif project == "-tw":
-        set_tailwind()
-    elif project == "deploy":
-        deploy(type=args[2], projectname=args[3] if len(args) > 3 else "project")
-    elif project == "-gethooks":
-        copy_hooks()
+
     else:
         print("Invalid choice")
         sys.exit(1)
