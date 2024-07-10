@@ -13,23 +13,23 @@ def create_react_project(projectname, ts=False):
     os.system("npm install")
     os.system("code .")
 
-def create_react_component(component_dir='components', component_name='Component', create_css=False, ts=False):
+def create_react_component(component_dir=True, component_name='Component', create_css=False, ts=False):
     extension = "tsx" if ts else "jsx"
     if not os.path.exists("src"):
         print("Error: src folder not found")
         return
 
     os.chdir("src")
-    if component_dir != '.':
-        os.makedirs(component_dir, exist_ok=True)
-        os.chdir(component_dir)
+    os.makedirs("components", exist_ok=True)
+    os.chdir("components")
 
-    if create_css:
+    if component_dir or create_css:
         os.makedirs(component_name, exist_ok=True)
         os.chdir(component_name)
         with open(f"{component_name}.{extension}", "w") as f:
             f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-        open(f"{component_name}.css", 'a').close()
+        if create_css:
+            open(f"{component_name}.css", 'a').close()
     else:
         with open(f"{component_name}.{extension}", "w") as f:
             f.write(f"import React from 'react';\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
@@ -240,20 +240,33 @@ def copy_hooks():
     
     print("Hooks copied successfully")
 
-def set_tailwind():
+def set_tailwind(material_tailwind=False):
     os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
     os.system("npx tailwindcss init -p")
-    os.system("npm i @material-tailwind/react")
-    tailwind_config = """
-    import withMT from '@material-tailwind/react/utils/withMT';
-    export default withMT({
-        content : ["*./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
-        theme:{
-            extend:{},
-        },
-        plugins:[],
-    });
+    tailwind_config= """
+    module.exports = {
+    content: [
+        './public/index.html',
+        './src/**/*.{js,jsx,ts,tsx}',
+    ],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+    }
     """
+    if (material_tailwind):
+        os.system("npm i @material-tailwind/react")
+        tailwind_config = """
+        import withMT from '@material-tailwind/react/utils/withMT';
+        export default withMT({
+            content : ["*./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+            theme:{
+                extend:{},
+            },
+            plugins:[],
+        });
+        """
     with open("tailwind.config.js", "w") as f:
         f.write(tailwind_config)
     with open("src/index.css", "w") as f:
@@ -280,48 +293,6 @@ def set_tailwind():
 
     export default App;
     """)
-def deploy_to_vercel(projectname):
-    # Install Vercel CLI
-    print("Installing Vercel CLI...")
-    os.system("npm install -g vercel")
-    print("Logging into Vercel...")
-    os.system("vercel login")
-    print("Initializing Vercel project...")
-    os.system("vercel init")
-    
-    # Create vercel.json configuration file
-    vercel_config = {
-        "name": projectname,
-        "version": 2,
-        "builds": [
-            {"src": "backend/**/*", "use": "@vercel/node"}
-        ],
-        "routes": [
-            {"src": "/(.*)", "dest": "backend/index.js"}
-        ]
-    }
-
-    with open("vercel.json", "w") as f:
-        json.dump(vercel_config, f, indent=2)
-    
-    # Deploy to Vercel
-    print("Deploying to Vercel...")
-    os.system("vercel --prod")
-    print("Deployment successful")
-    
-    
-def deploy(type, projectname):
-    if type=="-front":
-        deploy_react_project(projectname)
-    elif type=="-back":
-        deploy_to_vercel(projectname)
-    elif type=="-mern":
-        os.chdir("frontend")
-        deploy_react_project(projectname)
-        os.chdir("..")
-        os.chdir("backend")
-        deploy_to_vercel(projectname)
-
 def create_mern(project_name, github_repo=None):
     # Create project folder
     os.makedirs(project_name, exist_ok=True)
@@ -380,13 +351,11 @@ Additional Options:
         start_project(project)
         sys.exit()
     elif flag == "-cc":
-        create_react_component(component_dir= args[3] if len(args) > 3 and '-'not in args[3] else 'components',component_name= args[2] if len(args)> 2   else 'Component',create_css= "-css" in args, ts="-ts" in args)
+        create_react_component(component_dir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args)
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
-        set_tailwind()
-    elif project == "deploy":
-        deploy(type=args[2], projectname=args[3] if len(args) > 3 else "project")
+        set_tailwind(material_tailwind="-mt" in args)
     elif flag == "-gethooks":
         copy_hooks()
     elif project in ["1", "fe"]:
