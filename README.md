@@ -47,7 +47,7 @@ Usage:
 ## Usage
 
 ```bash
-python script.py <project_type> [project_name] [additional_options]
+python web_auto.py <project_type> [project_name] [additional_options]
 ```
 Create a frontend project 
     
@@ -96,3 +96,53 @@ You can set these variables in your shell profile (e.g., `.bashrc`, `.zshrc`, et
 export GITHUB_TOKEN=your_github_token
 export USERNAME=your_github_username
 export HOMEPAGE=https://your_github_username.github.io/
+```
+
+
+## Making the Scripts Global
+To make the best use of the file make them global so that they can be accessed from any directory.
+#### Linux
+
+1. **Move the script to a directory in your PATH:**
+
+    ```bash
+    sudo mv web_auto.py /usr/local/bin/web_auto
+    sudo chmod +x /usr/local/bin/web_auto
+    ```
+
+2. **Verify the command:**
+
+    ```bash
+    web_auto 
+    ```
+
+ Windows
+
+1. **Add the script directory to your PATH:**
+
+    - Right-click on 'This PC' or 'Computer' on the desktop or in File Explorer.
+    - Select 'Properties'.
+    - Click on 'Advanced system settings'.
+    - Click on the 'Environment Variables' button.
+    - In the 'System variables' section, find the 'Path' variable and select it. Click 'Edit'.
+    - Click 'New' and add the directory where `web_auto.py` is located.
+    - Click 'OK' to close all dialog boxes.
+
+2. **Create a batch file to run the script:**
+
+    - Open Notepad and paste the following lines, replacing `path_to_script` with the actual path:
+
+        ```batch
+        @echo off
+        python path_to_script\web_auto.py %*
+        ```
+
+    - Save the file as `web_auto.bat` in a directory that is in your PATH.
+
+3. **Verify the command:**
+
+    ```cmd
+    web_auto 
+    ```
+
+By following these steps, you can run the script globally on your system by using the `web_auto` command.
