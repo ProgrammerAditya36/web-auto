@@ -39,8 +39,9 @@ def create_react_component(nodir=False, component_name='Component', create_css=F
             f.write(f"import React from 'react';\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
     
 def deploy_react_project(page_name='Page', ts=False):
-    homepage = f"https://ProgrammerAditya36.github.io/{page_name}"
-    username = "ProgrammerAditya36"
+    home_link = os.getenv("HOMEPAGE")
+    homepage = f"{home_link}{page_name}"
+    username = os.getenv("USERNAME")
     repo_name = page_name
     token = os.getenv("GITHUB_TOKEN")
 
@@ -128,8 +129,7 @@ def create_node_project(projectname):
         )
     
     os.system("code .")
-
-def create_django_project(projectname, appname):
+def create_django_project(projectname="myproject", appname="myapp"):
     # Step 1: Create Django project
     ret = os.system(f"django-admin startproject {projectname}")
     if ret != 0:
@@ -156,38 +156,99 @@ def create_django_project(projectname, appname):
     os.makedirs("media", exist_ok=True)
     os.makedirs("templates", exist_ok=True)
     
-    # Step 6: Update settings.py for templates, static, and media directories
-    with open(f"{projectname}/settings.py", "r") as f:
-        lines = f.readlines()
+    # Step 6: Write new settings.py
+    settings_content = f"""
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = 'your-secret-key'
+
+DEBUG = True
+
+ALLOWED_HOSTS = []
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    '{appname}',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+ROOT_URLCONF = '{projectname}.urls'
+
+TEMPLATES = [
+    {{
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {{
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        }},
+    }},
+]
+
+WSGI_APPLICATION = '{projectname}.wsgi.application'
+
+DATABASES = {{
+    'default': {{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }}
+}}
+
+AUTH_PASSWORD_VALIDATORS = [
+    {{
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    }},
+    {{
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    }},
+    {{
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    }},
+    {{
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    }},
+]
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    """
     
-    # Find the position to add our configurations
-    import_index = -1
-    for i, line in enumerate(lines):
-        if 'import os' in line:
-            import_index = i + 1
-            break
-    
-    # Define paths
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    templates_dir = os.path.join(BASE_DIR, 'templates')
-    static_dir = os.path.join(BASE_DIR, 'static')
-    media_dir = os.path.join(BASE_DIR, 'media')
-    
-    # Modify settings.py
-    updated_lines = lines[:import_index]
-    updated_lines.append('\n')
-    updated_lines.append(f'TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "templates")]\n')
-    updated_lines.append('\n')
-    updated_lines.append(f'STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]\n')
-    updated_lines.append('\n')
-    updated_lines.append(f'MEDIA_ROOT = os.path.join(BASE_DIR, "media")]\n')
-    updated_lines.append('\n')
-    updated_lines.append('MEDIA_URL = "/media/"\n')
-    updated_lines.append('\n')
-    
-    # Write back to settings.py
     with open(f"{projectname}/settings.py", "w") as f:
-        f.writelines(updated_lines)
+        f.write(settings_content)
     
     # Step 7: Make initial migrations
     os.system("python3 manage.py makemigrations")
@@ -365,7 +426,7 @@ Additional Options:
     elif project in ["1", "fe"]:
         create_fe_project(args[2] if len(args) > 2 else "mywebapp")
     elif project in ["2", "django"]:
-        create_django_project(args[2] if len(args) > 2 else "mydjangoproject", args[2] if len(args) > 2 else "mydjangoapp")
+        create_django_project(projectname=args[2] if len(args) > 2 else "mydjangoproject",appname= args[3] if len(args) > 3 else "mydjangoapp")
     elif project in ["3", "react"]:
         create_react_project(args[2] if len(args) > 2 else "my-react-app")
     elif project in ["4", "react-ts"]:
