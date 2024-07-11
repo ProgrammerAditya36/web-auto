@@ -1,7 +1,7 @@
 
 # Project Setup Script
 
-This script automates the setup of various types of web development projects, including Frontend, Django, React, Node.js, and MERN stack projects. It also provides functionality for creating React components, deploying React projects to GitHub Pages, setting up Tailwind CSS, and copying custom hooks.
+This script automates the setup of various types of web development projects, including Frontend, Django, React, Node.js, and MERN stack projects. It also provides functionality for creating React components, deploying React projects to GitHub Pages, setting up Tailwind CSS.
 
 Usage:
 
