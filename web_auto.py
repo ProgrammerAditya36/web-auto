@@ -13,7 +13,7 @@ def create_react_project(projectname, ts=False):
     os.system("npm install")
     os.system("code .")
 def create_prettier_tailwind():
-    os.system("npm install -D prettier prettier-plugin-tailwind")
+    os.system("npm install -D prettier prettier-plugin-tailwindcss")
     os.system("npx tailwindcss init -p")
     with open(".prettierrc", "w") as f:
         f.write('{"plugins": ["prettier-plugin-tailwind"]}')
