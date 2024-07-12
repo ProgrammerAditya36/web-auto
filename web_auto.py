@@ -14,6 +14,7 @@ def create_react_project(projectname, ts=False):
     os.system("code .")
 def create_prettier_tailwind():
     os.system("npm install -D prettier prettier-plugin-tailwindcss")
+    os.system("npm install -D tailwindcss@latest postcss@latest autoprefixer@latest")
     os.system("npx tailwindcss init -p")
     with open(".prettierrc", "w") as f:
         f.write('{"plugins": ["prettier-plugin-tailwindcss"]}')
@@ -29,6 +30,16 @@ def create_prettier_tailwind():
     "strings": true
   }
 }""")
+    with open("tailwind.config.js", "w") as f:
+        f.write("""
+                module.exports = {
+                    content: ["*"],
+                    theme: {
+                        extend: {},
+                    },
+                    plugins: [],
+                };
+                """)
         
 def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
     extension = "tsx" if ts else "jsx"
@@ -324,22 +335,7 @@ def copy_hooks():
 
 def set_tailwind(react=False,material_tailwind=False):  
     create_prettier_tailwind()
-    tailwind_config = ""  
-    if react:
-        os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
-        os.system("npx tailwindcss init -p")
-        tailwind_config= """
-        module.exports = {
-        content: [
-            './public/index.html',
-            './src/**/*.{js,jsx,ts,tsx}',
-        ],
-        theme: {
-            extend: {},
-        },
-        plugins: [],
-        }
-        """
+    tailwind_config = ""          
     if (material_tailwind):
         os.system("npm i @material-tailwind/react")
         tailwind_config = """
@@ -352,33 +348,32 @@ def set_tailwind(react=False,material_tailwind=False):
             plugins:[],
         });
         """
-    if tailwind_config != "":
         with open("tailwind.config.js", "w") as f:
             f.write(tailwind_config)
-        with open("src/index.css", "w") as f:
-            f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
-        os.makedirs(".vscode", exist_ok=True)
-        with open(".vscode/settings.json", "w") as f:
-            f.write("""{"editor.formatOnSave": true,
-                    "files.associations": {"*.css": "tailwindcss"},
-                    }""")
-        with open("src/App.css", "w") as f:
-            f.write("")
-        with open("src/App.jsx", "w") as f:
-            f.write("""
-        import './App.css';
-        import './index.css';
-        import React from 'react';
+    with open("src/index.css", "w") as f:
+        f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
+    os.makedirs(".vscode", exist_ok=True)
+    with open(".vscode/settings.json", "w") as f:
+        f.write("""{"editor.formatOnSave": true,
+                "files.associations": {"*.css": "tailwindcss"},
+                }""")
+    with open("src/App.css", "w") as f:
+        f.write("")
+    with open("src/App.jsx", "w") as f:
+        f.write("""
+    import './App.css';
+    import './index.css';
+    import React from 'react';
 
-        function App() {
-        return (
-            <>
-            </>
-        );
-        }
+    function App() {
+    return (
+        <>
+        </>
+    );
+    }
 
-        export default App;
-        """)
+    export default App;
+    """)
 def create_mern(project_name, github_repo=None):
     # Create project folder
     os.makedirs(project_name, exist_ok=True)
