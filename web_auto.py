@@ -322,10 +322,10 @@ def copy_hooks():
     
     print("Hooks copied successfully")
 
-def set_tailwind(material_tailwind=False):  
+def set_tailwind(react=False,material_tailwind=False):  
     create_prettier_tailwind()
     tailwind_config = ""  
-    if "react" in args:
+    if react:
         os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
         os.system("npx tailwindcss init -p")
         tailwind_config= """
@@ -444,7 +444,7 @@ Additional Options:
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
-        set_tailwind(material_tailwind="-mt" in args)
+        set_tailwind(react=(project=="react"), material_tailwind="-mt" in args)
     elif flag == "-gethooks":
         copy_hooks()
     elif project in ["1", "fe"]:
