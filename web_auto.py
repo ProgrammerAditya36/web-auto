@@ -12,7 +12,11 @@ def create_react_project(projectname, ts=False):
     os.chdir(projectname)
     os.system("npm install")
     os.system("code .")
-
+def create_prettier_tailwind():
+    os.system("npm install -D prettier prettier-plugin-tailwind")
+    os.system("npx tailwindcss init -p")
+    with open(".prettierrc", "w") as f:
+        f.write('{"plugins": ["prettier-plugin-tailwind"]}')
 def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
     extension = "tsx" if ts else "jsx"
     if not os.path.exists("src"):
@@ -306,20 +310,22 @@ def copy_hooks():
     print("Hooks copied successfully")
 
 def set_tailwind(material_tailwind=False):
-    os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
-    os.system("npx tailwindcss init -p")
-    tailwind_config= """
-    module.exports = {
-    content: [
-        './public/index.html',
-        './src/**/*.{js,jsx,ts,tsx}',
-    ],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-    }
-    """
+    create_prettier_tailwind()
+    if "react" in args:
+        os.system("npm install tailwindcss@latest postcss@latest autoprefixer@latest")
+        os.system("npx tailwindcss init -p")
+        tailwind_config= """
+        module.exports = {
+        content: [
+            './public/index.html',
+            './src/**/*.{js,jsx,ts,tsx}',
+        ],
+        theme: {
+            extend: {},
+        },
+        plugins: [],
+        }
+        """
     if (material_tailwind):
         os.system("npm i @material-tailwind/react")
         tailwind_config = """
@@ -408,7 +414,7 @@ Additional Options:
         sys.exit(1)
 
     project = sys.argv[1]
-    flag = sys.argv[2] if len(sys.argv) > 2 else None
+    flag = sys.argv[2] if len(sys.argv) > 2 else sys.argv[1]
     print(project)
     args = sys.argv
     print(args)
