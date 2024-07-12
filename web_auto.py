@@ -17,6 +17,19 @@ def create_prettier_tailwind():
     os.system("npx tailwindcss init -p")
     with open(".prettierrc", "w") as f:
         f.write('{"plugins": ["prettier-plugin-tailwind"]}')
+    os.makedirs(".vscode", exist_ok=True)
+    with open(".vscode/settings.json", "w") as f:
+        f.write("""{
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}""")
+        
 def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
     extension = "tsx" if ts else "jsx"
     if not os.path.exists("src"):
