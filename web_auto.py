@@ -350,30 +350,32 @@ def set_tailwind(react=False,material_tailwind=False):
         """
         with open("tailwind.config.js", "w") as f:
             f.write(tailwind_config)
-    with open("src/index.css", "w") as f:
-        f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
-    os.makedirs(".vscode", exist_ok=True)
-    with open(".vscode/settings.json", "w") as f:
-        f.write("""{"editor.formatOnSave": true,
-                "files.associations": {"*.css": "tailwindcss"},
-                }""")
-    with open("src/App.css", "w") as f:
-        f.write("")
-    with open("src/App.jsx", "w") as f:
-        f.write("""
-    import './App.css';
-    import './index.css';
-    import React from 'react';
+    if (react):
+        with open("src/index.css", "w") as f:
+            f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
+        os.makedirs(".vscode", exist_ok=True)
+        with open(".vscode/settings.json", "w") as f:
+            f.write("""{"editor.formatOnSave": true,
+                    "files.associations": {"*.css": "tailwindcss"},
+                    }""")
+        
+        with open("src/App.css", "w") as f:
+            f.write("")
+        with open("src/App.jsx", "w") as f:
+            f.write("""
+        import './App.css';
+        import './index.css';
+        import React from 'react';
 
-    function App() {
-    return (
-        <>
-        </>
-    );
-    }
+        function App() {
+        return (
+            <>
+            </>
+        );
+        }
 
-    export default App;
-    """)
+        export default App;
+        """)
 def create_mern(project_name, github_repo=None):
     # Create project folder
     os.makedirs(project_name, exist_ok=True)
