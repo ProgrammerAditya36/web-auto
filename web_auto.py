@@ -351,6 +351,16 @@ def set_tailwind(react=False,material_tailwind=False):
         with open("tailwind.config.js", "w") as f:
             f.write(tailwind_config)
     if (react):
+        with open("tailwind.config.js", "w") as f:
+            f.write("""
+            module.exports = {
+                content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
+                theme: {
+                    extend: {},
+                },
+                plugins: [],
+            };
+            """)
         with open("src/index.css", "w") as f:
             f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
         os.makedirs(".vscode", exist_ok=True)
