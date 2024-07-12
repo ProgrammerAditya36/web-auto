@@ -16,7 +16,7 @@ def create_prettier_tailwind():
     os.system("npm install -D prettier prettier-plugin-tailwindcss")
     os.system("npx tailwindcss init -p")
     with open(".prettierrc", "w") as f:
-        f.write('{"plugins": ["prettier-plugin-tailwind"]}')
+        f.write('{"plugins": ["prettier-plugin-tailwindcss"]}')
     os.makedirs(".vscode", exist_ok=True)
     with open(".vscode/settings.json", "w") as f:
         f.write("""{
