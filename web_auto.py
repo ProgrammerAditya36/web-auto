@@ -5,41 +5,61 @@ import os
 import json
 import requests
 from requests.auth import HTTPBasicAuth
+def create_redux():
+    os.system("npm install redux react-redux @reduxjs/toolkit")
+    os.makedirs("src/store", exist_ok=True)
+    with open("src/store/store.js", "w") as f:
+        f.write("""
+        import { configureStore } from '@reduxjs/toolkit';
+        import rootReducer from './reducers';
 
+        const store = configureStore({
+            reducer: rootReducer,
+        });
+
+        export default store;
+        """)
+    os.makedirs("src/store/reducers", exist_ok=True)
+    with open("src/store/reducers/index.js", "w") as f:
+        f.write("""
+        import { combineReducers } from 'redux';
+
+        const rootReducer = combineReducers({
+            // Add reducers here
+        });
+
+        export default rootReducer;
+        """)
 def create_react_project(projectname, ts=False):
     template = "react-ts" if ts else "react"
+    print(f"Creating a new React project with template {template}...")
     os.system(f"npm create vite@latest {projectname} -- --template {template}")
     os.chdir(projectname)
+    tw = input("Do you want to use Tailwind CSS? (y/n): ")
+    if tw.lower() == "y":
+        setup_tailwind(react=True)
+    redux = input("Do you want to use Redux? (y/n): ")
+    if redux.lower() == "y":
+        create_redux()
     os.system("npm install")
     os.system("code .")
-def create_prettier_tailwind():
+def setup_prettier():
     os.system("npm install -D prettier prettier-plugin-tailwindcss")
-    os.system("npm install -D tailwindcss@latest postcss@latest autoprefixer@latest")
-    os.system("npx tailwindcss init -p")
     with open(".prettierrc", "w") as f:
         f.write('{"plugins": ["prettier-plugin-tailwindcss"]}')
+    
     os.makedirs(".vscode", exist_ok=True)
-    with open(".vscode/settings.json", "w") as f:
+    with open(".vscode/settings.json", "a+") as f:
         f.write("""{
-  "tailwindCSS.includeLanguages": {
-    "html": "html",
-    "javascript": "javascript",
-    "css": "css"
-  },
-  "editor.quickSuggestions": {
-    "strings": true
-  }
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "css": "css"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    }
 }""")
-    with open("tailwind.config.js", "w") as f:
-        f.write("""
-                module.exports = {
-                    content: ["*"],
-                    theme: {
-                        extend: {},
-                    },
-                    plugins: [],
-                };
-                """)
         
 def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
     extension = "tsx" if ts else "jsx"
@@ -332,60 +352,67 @@ def copy_hooks():
             shutil.copy(full_file_name, destination_dir)
     
     print("Hooks copied successfully")
-
-def set_tailwind(react=False,material_tailwind=False):  
-    create_prettier_tailwind()
-    tailwind_config = ""          
-    if (material_tailwind):
+def setup_tailwind(react=False, material_tailwind=False):
+    os.system("npm install -D tailwindcss@latest postcss@latest autoprefixer@latest")
+    os.system("npx tailwindcss init -p")
+    
+    tailwind_config = ""
+    if material_tailwind:
         os.system("npm i @material-tailwind/react")
         tailwind_config = """
-        import withMT from '@material-tailwind/react/utils/withMT';
-        export default withMT({
-            content : ["*./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
-            theme:{
-                extend:{},
-            },
-            plugins:[],
-        });
-        """
+import withMT from '@material-tailwind/react/utils/withMT';
+export default withMT({
+    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+});
+"""
         with open("tailwind.config.js", "w") as f:
             f.write(tailwind_config)
-    if (react):
+    
+    if react:
         with open("tailwind.config.js", "w") as f:
             f.write("""
-            module.exports = {
-                content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
-                theme: {
-                    extend: {},
-                },
-                plugins: [],
-            };
-            """)
+module.exports = {
+    content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
+};
+""")
         with open("src/index.css", "w") as f:
             f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
+        
         os.makedirs(".vscode", exist_ok=True)
         with open(".vscode/settings.json", "w") as f:
-            f.write("""{"editor.formatOnSave": true,
-                    "files.associations": {"*.css": "tailwindcss"},
-                    }""")
-        
+            f.write("""{
+    "editor.formatOnSave": true,
+    "files.associations": {"*.css": "tailwindcss"}
+}"""
+    
+)
+        setup_prettier()
         with open("src/App.css", "w") as f:
             f.write("")
+        
         with open("src/App.jsx", "w") as f:
             f.write("""
-        import './App.css';
-        import './index.css';
-        import React from 'react';
+import './App.css';
+import './index.css';
+import React from 'react';
 
-        function App() {
-        return (
-            <>
-            </>
-        );
-        }
+function App() {
+    return (
+        <>
+        </>
+    );
+}
 
-        export default App;
-        """)
+export default App;
+""")
 def create_mern(project_name, github_repo=None):
     # Create project folder
     os.makedirs(project_name, exist_ok=True)
@@ -451,7 +478,7 @@ Additional Options:
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
-        set_tailwind(react=(project=="react"), material_tailwind="-mt" in args)
+        setup_tailwind(react=(project=="react"), material_tailwind="-mt" in args)
     elif flag == "-gethooks":
         copy_hooks()
     elif project in ["1", "fe"]:
