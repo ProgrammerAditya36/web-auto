@@ -479,7 +479,7 @@ Additional Options:
         setup_tailwind()
     elif flag == "-gethooks":
         copy_hooks()
-    elif flag == "cs":
+    elif flag == "-cs":
         create_redux_slice(args[2] if len(args) > 2 else "slice")
     elif project in ["1", "fe"]:
         create_fe_project(args[2] if len(args) > 2 else "mywebapp")
