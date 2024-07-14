@@ -369,7 +369,8 @@ export default withMT({
             f.write("""
             module.exports = {
                 public: "./index.html",
-                content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
+               content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx},
+    './index.html',"],
                 theme: {
                     extend: {},
                 },
