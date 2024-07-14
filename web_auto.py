@@ -7,38 +7,19 @@ import requests
 from requests.auth import HTTPBasicAuth
 def create_redux():
     os.system("npm install redux react-redux @reduxjs/toolkit")
-    os.makedirs("src/store", exist_ok=True)
-    with open("src/store/store.js", "w") as f:
-        f.write("""
-        import { configureStore } from '@reduxjs/toolkit';
-        import rootReducer from './reducers';
-
-        const store = configureStore({
-            reducer: rootReducer,
-        });
-
-        export default store;
-        """)
-    os.makedirs("src/store/reducers", exist_ok=True)
-    with open("src/store/reducers/index.js", "w") as f:
-        f.write("""
-        import { combineReducers } from 'redux';
-
-        const rootReducer = combineReducers({
-            // Add reducers here
-        });
-
-        export default rootReducer;
-        """)
+    os.makedirs("src/app", exist_ok=True)
+    open("src/app/store.js", 'a').close()
+        
 def create_react_project(projectname, ts=False):
     template = "react-ts" if ts else "react"
     print(f"Creating a new React project with template {template}...")
     os.system(f"npm create vite@latest {projectname} -- --template {template}")
     os.chdir(projectname)
     tw = input("Do you want to use Tailwind CSS? (y/n): ")
+    redux = input("Do you want to use Redux? (y/n): ")
+    
     if tw.lower() == "y":
         setup_tailwind(react=True)
-    redux = input("Do you want to use Redux? (y/n): ")
     if redux.lower() == "y":
         create_redux()
     os.system("npm install")
