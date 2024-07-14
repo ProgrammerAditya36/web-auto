@@ -358,7 +358,7 @@ module.exports = {
         
         os.makedirs(".vscode", exist_ok=True)
         with open(".vscode/settings.json", "w") as f:
-            f.write("""    "editor.formatOnSave": true,
+            f.write("""   {"editor.formatOnSave": true,
     "files.associations": { "*.css": "tailwindcss" },
 
     "tailwindCSS.includeLanguages": {
