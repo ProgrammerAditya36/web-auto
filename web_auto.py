@@ -42,14 +42,12 @@ def create_redux_slice(slice_name):
         f.write(f"""
                 import {{ createSlice }} from "@reduxjs/toolkit";
 const initialState ={{}};
-];
-const {slice}Slice = createSlice({{
-    name: "{slice}",
+const {slice_name}Slice = createSlice({{
+    name: "{slice_name}",
     initialState,
     reducers: {{}}
 }});
-export const {{}} = {slice}Slice.actions;
-export default {slice}Slice.reducer;              
+export default {slice_name}Slice.reducer;              
                 
                 
                 
