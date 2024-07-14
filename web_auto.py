@@ -45,7 +45,7 @@ def create_react_project(projectname, ts=False):
     redux = input("Do you want to use Redux? (y/n): ")
     
     if tw.lower() == "y":
-        setup_tailwind(react=True)
+        setup_tailwind()
     if redux.lower() == "y":
         create_redux()
     os.system("npm install")
@@ -458,7 +458,7 @@ Additional Options:
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
-        setup_tailwind(react=(project=="react"), material_tailwind="-mt" in args)
+        setup_tailwind()
     elif flag == "-gethooks":
         copy_hooks()
     elif project in ["1", "fe"]:
