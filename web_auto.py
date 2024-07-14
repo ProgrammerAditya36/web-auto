@@ -370,7 +370,7 @@ export default withMT({
             module.exports = {
                 public: "./index.html",
                content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx},
-    './index.html',"],
+    './index.html',],
                 theme: {
                     extend: {},
                 },
