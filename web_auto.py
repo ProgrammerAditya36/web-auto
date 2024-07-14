@@ -35,7 +35,25 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
                 
                 """)
-        
+def create_redux_slice(slice_name):
+    os.makedirs(f"src/features/{slice_name}", exist_ok=True)
+    os.chdir(f"src/features/{slice_name}")
+    with open(f"{slice_name}Slice.jsx", "w") as f:
+        f.write(f"""
+                import {{ createSlice }} from "@reduxjs/toolkit";
+const initialState ={{}};
+];
+const {slice}Slice = createSlice({{
+    name: "{slice}",
+    initialState,
+    reducers: {{}}
+}});
+export const {{}} = {slice}Slice.actions;
+export default {slice}Slice.reducer;              
+                
+                
+                
+                """)
 def create_react_project(projectname, ts=False):
     template = "react-ts" if ts else "react"
     print(f"Creating a new React project with template {template}...")
@@ -461,6 +479,8 @@ Additional Options:
         setup_tailwind()
     elif flag == "-gethooks":
         copy_hooks()
+    elif flag == "cs":
+        create_redux_slice(args[2] if len(args) > 2 else "slice")
     elif project in ["1", "fe"]:
         create_fe_project(args[2] if len(args) > 2 else "mywebapp")
     elif project in ["2", "django"]:
