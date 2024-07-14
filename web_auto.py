@@ -27,20 +27,9 @@ def create_react_project(projectname, ts=False):
 def setup_prettier():
     os.system("npm install -D prettier prettier-plugin-tailwindcss")
     with open(".prettierrc", "w") as f:
-        f.write('{"plugins": ["prettier-plugin-tailwindcss"]}')
+        f.write("""{ "plugins": ["prettier-plugin-tailwindcss"], "tabWidth": 4 }""")
     
-    os.makedirs(".vscode", exist_ok=True)
-    with open(".vscode/settings.json", "a+") as f:
-        f.write("""{
-    "tailwindCSS.includeLanguages": {
-        "html": "html",
-        "javascript": "javascript",
-        "css": "css"
-    },
-    "editor.quickSuggestions": {
-        "strings": true
-    }
-}""")
+    
         
 def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
     extension = "tsx" if ts else "jsx"
@@ -369,31 +358,25 @@ module.exports = {
         
         os.makedirs(".vscode", exist_ok=True)
         with open(".vscode/settings.json", "w") as f:
-            f.write("""{
-    "editor.formatOnSave": true,
-    "files.associations": {"*.css": "tailwindcss"}
-}"""
-    
-)
+            f.write("""    "editor.formatOnSave": true,
+    "files.associations": { "*.css": "tailwindcss" },
+
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "css": "css"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    }
+}
+        """  
+        )
         setup_prettier()
         with open("src/App.css", "w") as f:
             f.write("")
         
-        with open("src/App.jsx", "w") as f:
-            f.write("""
-import './App.css';
-import './index.css';
-import React from 'react';
-
-function App() {
-    return (
-        <>
-        </>
-    );
-}
-
-export default App;
-""")
+        
 def create_mern(project_name, github_repo=None):
     # Create project folder
     os.makedirs(project_name, exist_ok=True)
@@ -455,7 +438,8 @@ Additional Options:
         create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, dir='components' )
     elif flag == "-cp":
         create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, dir='pages' )
-    
+    elif flag == "-prettier":
+        setup_prettier()
     elif flag == "-mp":
         deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
