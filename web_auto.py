@@ -8,7 +8,15 @@ from requests.auth import HTTPBasicAuth
 def create_redux():
     os.system("npm install redux react-redux @reduxjs/toolkit")
     os.makedirs("src/app", exist_ok=True)
-    open("src/app/store.jsx", 'a').close()
+    with open("src/app/store.jsx", 'w') as f:
+        f.write(""" 
+                import { configureStore } from "@reduxjs/toolkit";
+                export const store = configureStore({
+                    reducer: {},
+                });
+                
+                
+                """)
     with open("src/main.jsx", "w") as f:
         f.write("""
                 import React from "react";
@@ -343,39 +351,21 @@ def copy_hooks():
             shutil.copy(full_file_name, destination_dir)
     
     print("Hooks copied successfully")
-def setup_tailwind(react=False, material_tailwind=False):
+def setup_tailwind():
     os.system("npm install -D tailwindcss@latest postcss@latest autoprefixer@latest")
-    os.system("npx tailwindcss init -p")
-    
-    tailwind_config = ""
-    if material_tailwind:
-        os.system("npm i @material-tailwind/react")
-        tailwind_config = """
-import withMT from '@material-tailwind/react/utils/withMT';
-export default withMT({
-    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx},
-    './index.html',"],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-});
-"""
-        with open("tailwind.config.js", "w") as f:
-            f.write(tailwind_config)
-    
-    if react:
-        with open("tailwind.config.js", "w") as f:
-            f.write("""
-            module.exports = {
-                public: "./index.html",
-               content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}",
-    './index.html',],
-                theme: {
-                    extend: {},
-                },
-                plugins: [],
-            };
+    os.system("npx tailwindcss init -p")    
+
+
+    with open("tailwind.config.js", "w") as f:
+        f.write("""
+        module.exports = {
+            content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx,css,html}",
+'./index.html',],
+            theme: {
+                extend: {},
+            },
+            plugins: [],
+        };
 
 """)
         with open("src/index.css", "w") as f:
