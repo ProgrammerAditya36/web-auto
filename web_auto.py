@@ -9,7 +9,7 @@ def create_redux():
     os.system("npm install redux react-redux @reduxjs/toolkit")
     os.makedirs("src/app", exist_ok=True)
     open("src/app/store.jsx", 'a').close()
-    with open("main.jsx", "w") as f:
+    with open("src/main.jsx", "w") as f:
         f.write("""
                 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -41,6 +41,9 @@ def create_react_project(projectname, ts=False):
     if redux.lower() == "y":
         create_redux()
     os.system("npm install")
+    start = input("Do you want to start the development server? (y/n): ")
+    if start.lower() == "y":
+        os.system("wa react -start")
     os.system("code .")
 def setup_prettier():
     os.system("npm install -D prettier prettier-plugin-tailwindcss")
