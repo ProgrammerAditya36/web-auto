@@ -474,13 +474,13 @@ Additional Options:
     elif flag == "-prettier":
         setup_prettier()
     elif flag == "-mp":
-        deploy_react_project(args[2] if len(args) > 2 else 'Page', ts="-ts" in args)
+        deploy_react_project(args[3] if len(args) > 2 else 'Page', ts="-ts" in args)
     elif flag == "-tw":
         setup_tailwind()
     elif flag == "-gethooks":
         copy_hooks()
     elif flag == "-cs":
-        create_redux_slice(args[2] if len(args) > 2 else "slice")
+        create_redux_slice(args[3] if len(args) > 2 else "slice")
     elif project in ["1", "fe"]:
         create_fe_project(args[2] if len(args) > 2 else "mywebapp")
     elif project in ["2", "django"]:
