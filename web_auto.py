@@ -8,7 +8,25 @@ from requests.auth import HTTPBasicAuth
 def create_redux():
     os.system("npm install redux react-redux @reduxjs/toolkit")
     os.makedirs("src/app", exist_ok=True)
-    open("src/app/store.js", 'a').close()
+    open("src/app/store.jsx", 'a').close()
+    with open("main.jsx", "w") as f:
+        f.write("""
+                import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </React.StrictMode>,
+);
+
+                
+                """)
         
 def create_react_project(projectname, ts=False):
     template = "react-ts" if ts else "react"
@@ -345,13 +363,15 @@ export default withMT({
     if react:
         with open("tailwind.config.js", "w") as f:
             f.write("""
-module.exports = {
-    content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
-    theme: {
-        extend: {},
-    },
-    plugins: [],
-};
+            module.exports = {
+                public: "./index.html",
+                content: ["./src/**/*.{js,jsx,ts,tsx,html}"],
+                theme: {
+                    extend: {},
+                },
+                plugins: [],
+            };
+
 """)
         with open("src/index.css", "w") as f:
             f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;")
