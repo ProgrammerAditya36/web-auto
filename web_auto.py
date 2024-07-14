@@ -47,6 +47,7 @@ const {slice_name}Slice = createSlice({{
     initialState,
     reducers: {{}}
 }});
+export const {{}} = {slice_name}Slice.actions;
 export default {slice_name}Slice.reducer;              
                 
                 
@@ -466,7 +467,12 @@ Additional Options:
         start_project(project)
         sys.exit()
     elif flag == "-cc":
-        create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, dir='components' )
+        nodir = input("Do you want to create the component in the current directory? (y/n): ").lower() == 'y'
+        component_name = input("Enter the component name: ")
+        create_css = input("Do you want to create a CSS file? (y/n): ").lower() == 'y'
+        ts = input("Do you want to use TypeScript? (y/n): ").lower() == 'y'
+        dir = input("Enter the directory (default is 'components'): ") or 'components'
+        create_react_component(nodir, component_name, create_css, ts, dir)
     elif flag == "-cp":
         create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, dir='pages' )
     elif flag == "-prettier":
