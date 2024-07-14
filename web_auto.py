@@ -353,7 +353,8 @@ def setup_tailwind(react=False, material_tailwind=False):
         tailwind_config = """
 import withMT from '@material-tailwind/react/utils/withMT';
 export default withMT({
-    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+    content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx},
+    './index.html',"],
     theme: {
         extend: {},
     },
