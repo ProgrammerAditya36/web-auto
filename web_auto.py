@@ -89,8 +89,8 @@ def create_react_component(dir=False, component_name='Component', ts=False, pare
     if(dir):
         os.makedirs(component_name, exist_ok=True)
         os.chdir(component_name)
-        with open(f"{component_name}.{extension}", "w") as f:
-            f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
+    with open(f"{component_name}.{extension}", "w") as f:
+        f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
 
 def deploy_react_project(page_name='Page', ts=False):
     home_link = os.getenv("HOMEPAGE")
@@ -456,11 +456,12 @@ Additional Options:
         sys.exit()
     elif flag == "-cc":
         dir = "-dir" in args
-        component_name = args[3] if len(args) > 3 else 'Component'
-        parent = args[4] if len(args) > 4 else 'components'
+        component_name = args[3] if len(args)> 3  and args[3] != '-dir' else 'Component'
+        parent = args[4] if len(args)  > 4 and args[4] != '-dir' else 'components'
+        print(dir, component_name, parent)
         create_react_component(dir=dir, component_name=component_name, parent=parent)
     elif flag == "-cp":
-        create_react_component(dir= "-dir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, parent='pages' )
+        create_react_component(dir= "-dir" in args,component_name= args[3] if len(args)> 3   else 'Component' , parent='pages' )
     elif flag == "-prettier":
         setup_prettier()
     elif flag == "-mp":
