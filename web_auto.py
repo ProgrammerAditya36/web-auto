@@ -77,31 +77,21 @@ def setup_prettier():
     
     
         
-def create_react_component(nodir=False, component_name='Component', create_css=False, ts=False, dir='components'):
+def create_react_component(dir=False, component_name='Component', ts=False, parent='components'):
     extension = "tsx" if ts else "jsx"
     if not os.path.exists("src"):
         print("Error: src folder not found")
         return
 
     os.chdir("src")
-    os.makedirs(dir, exist_ok=True)
-    os.chdir(dir)
-    print(nodir)
-    if( not nodir):
+    os.makedirs(parent, exist_ok=True)
+    os.chdir(parent)
+    if(dir):
         os.makedirs(component_name, exist_ok=True)
         os.chdir(component_name)
         with open(f"{component_name}.{extension}", "w") as f:
             f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-    if (create_css):
-        os.makedirs(component_name, exist_ok=True)
-        os.chdir(component_name)
-        with open(f"{component_name}.{extension}", "w") as f:
-            f.write(f"import React from 'react';\nimport './{component_name}.css'\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-        open(f"{component_name}.css", 'a').close()
-    else:
-        with open(f"{component_name}.{extension}", "w") as f:
-            f.write(f"import React from 'react';\nconst {component_name} = () => {{\nreturn (\n<div>\n<h1>{component_name}</h1>\n</div>\n)\n}}\n\nexport default {component_name};")
-    
+
 def deploy_react_project(page_name='Page', ts=False):
     home_link = os.getenv("HOMEPAGE")
     homepage = f"{home_link}{page_name}"
@@ -460,21 +450,17 @@ Additional Options:
 
     project = sys.argv[1]
     flag = sys.argv[2] if len(sys.argv) > 2 else sys.argv[1]
-    print(project)
     args = sys.argv
-    print(args)
     if "-start" in args:
         start_project(project)
         sys.exit()
     elif flag == "-cc":
-        nodir = input("Do you want to create the component in the current directory? (y/n): ").lower() == 'y'
-        component_name = input("Enter the component name: ")
-        create_css = input("Do you want to create a CSS file? (y/n): ").lower() == 'y'
-        ts = input("Do you want to use TypeScript? (y/n): ").lower() == 'y'
-        dir = input("Enter the directory (default is 'components'): ") or 'components'
-        create_react_component(nodir, component_name, create_css, ts, dir)
+        dir = "-dir" in args
+        component_name = args[3] if len(args) > 3 else 'Component'
+        parent = args[4] if len(args) > 4 else 'components'
+        create_react_component(dir=dir, component_name=component_name, parent=parent)
     elif flag == "-cp":
-        create_react_component(nodir= "-nodir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, dir='pages' )
+        create_react_component(dir= "-dir" in args,component_name= args[3] if len(args)> 3   else 'Component',create_css= "-css" in args, ts="-ts" in args, parent='pages' )
     elif flag == "-prettier":
         setup_prettier()
     elif flag == "-mp":
